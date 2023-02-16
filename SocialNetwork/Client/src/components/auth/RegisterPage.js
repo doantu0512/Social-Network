@@ -29,6 +29,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LogoBlameo from '../../assets/images/blameo_logo-no_bg.png'
 import './css/register.css'
+import {TabTitle} from "../../hocs/GeneralFunction";
 
 class RegisterPage extends Component {
     constructor(props) {
@@ -232,6 +233,7 @@ class RegisterPage extends Component {
     };
 
     render() {
+        TabTitle("Blameo | Register")
         const {username, email, firstName, lastName, password, confirmPassword, address, city} = this.state;
         const errors = this.validate(username, email, firstName, lastName, password, confirmPassword, address, city);
         const isEnabled = !Object.keys(errors).some(x => errors[x])
@@ -283,7 +285,7 @@ class RegisterPage extends Component {
                             </div>
 
                             <div className="row-2">
-                                <Box sx={{width: 226, height: 40}}>
+                                <Box sx={{width: 222, height: 40}}>
                                     <FormControl fullWidth size="small" error={this.state.mess_gender.length!==0}>
                                         <InputLabel id="gender">Giới tính</InputLabel>
                                         <Select

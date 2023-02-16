@@ -8,6 +8,9 @@
     background-attachment: fixed;
     background-size: cover;
 }
+
+.Register::-webkit-scrollbar {
+    display: none;}
 .Register-container{
     width: 600px;
     background-color:white;
