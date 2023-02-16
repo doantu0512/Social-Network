@@ -1,11 +1,34 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment} from 'react';
 import '../../styles/FormPages.css'
-import { toast } from 'react-toastify';
-import { ToastComponent } from '../common';
+import {toast} from 'react-toastify';
+import TextField from '@mui/material/TextField';
+import {ToastComponent} from '../common';
 import placeholder_user_image from '../../assets/images/placeholder.png';
 import default_background_image from '../../assets/images/default-background-image.jpg';
-import { connect } from 'react-redux';
-import { registerAction, redirectAction } from '../../store/actions/authActions'
+import {connect} from 'react-redux';
+import {registerAction, redirectAction} from '../../store/actions/authActions'
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import viLocale from 'date-fns/locale/vi';
+import FormHelperText from '@mui/material/FormHelperText';
+import {IconButton, InputAdornment, OutlinedInput} from "@mui/material";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
+import Button from "@mui/material/Button";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import LogoBlameo from '../../assets/images/blameo_logo-no_bg.png'
+import './css/register.css'
 
 class RegisterPage extends Component {
     constructor(props) {
@@ -20,6 +43,28 @@ class RegisterPage extends Component {
             lastName: '',
             address: '',
             city: '',
+            gender: '',
+            birthday: new Date(),
+            numberPhone: '',
+
+            mess_firstName: '',
+            mess_lastName: '',
+            mess_gender: '',
+            mess_birthday: '',
+            mess_numberPhone: '',
+            mess_email: '',
+            mess_username: '',
+            mess_password: '',
+            mess_confirmPassword: '',
+            mess_city: '',
+            mess_address: '',
+
+            showPassword: false,
+            showPasswordConfirm: false,
+            dialog: false,
+            backdrop: false,
+
+
             profilePicUrl: placeholder_user_image,
             backgroundImageUrl: default_background_image,
             touched: {
@@ -38,19 +83,21 @@ class RegisterPage extends Component {
         this.onSubmitHandler = this.onSubmitHandler.bind(this);
     }
 
-    componentDidUpdate(prevProps, prevState){
+
+    componentDidUpdate(prevProps, prevState) {
+
         if (this.props.registerError.hasError && prevProps.registerError !== this.props.registerError) {
-            toast.error(<ToastComponent.errorToast text={this.props.registerError.message} />, {
+            this.setState({backdrop: false})
+            toast.error(<ToastComponent.errorToast text={this.props.registerError.message}/>, {
                 position: toast.POSITION.TOP_RIGHT
             });
         } else if (this.props.registerSuccess) {
             this.props.redirect();
 
-            toast.success(<ToastComponent.successToast text={this.props.registerMessage} />, {
-                position: toast.POSITION.TOP_RIGHT
-            });
+            this.setState({backdrop: false})
+            this.setState({dialog: true})
 
-            this.props.history.push('/login');
+
         }
     }
 
@@ -58,53 +105,134 @@ class RegisterPage extends Component {
         this.setState({
             [event.target.name]: event.target.value
         });
+        console.log(event.target.name + ':' + event.target.value)
     }
 
     onSubmitHandler(event) {
-        event.preventDefault();
-
         if (!this.canBeSubmitted()) {
             return;
         }
-
-        const { touched, ...otherProps } = this.state;
+        this.setState({backdrop: true})
+        const {touched, ...otherProps} = this.state;
         this.props.register(otherProps)
     }
 
     canBeSubmitted() {
-        const { username, email, firstName, lastName, password, confirmPassword, address, city } = this.state;
-        const errors = this.validate(username, email, firstName, lastName, password, confirmPassword, address, city);
-        const isDisabled = Object.keys(errors).some(x => errors[x])
+        const {
+            username,
+            email,
+            firstName,
+            lastName,
+            password,
+            confirmPassword,
+            address,
+            city,
+            gender,
+            numberPhone
+        } = this.state;
+        const errors = this.validate(username, email, firstName, lastName, password, confirmPassword, address, city, gender, numberPhone);
+        for (let errorsKey in errors) {
+            if (errors[errorsKey] == true) {
+                this.setState({['mess_' + errorsKey]: "Trường này không được bỏ trống !"})
+            } else {
+                this.setState({['mess_' + errorsKey]: ""})
+            }
+        }
+
+        let isDisabled = Object.keys(errors).some(x => errors[x])
+
+        const phoneNumberRegex = new RegExp(
+            '([\+84|84|0]+(3|5|7|8|9|1[2|6|8|9]))+([0-9]{8})'
+        )
+        const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+        const passwordRegex = new RegExp(
+            '^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[.,/;#?!@$%^&*-]).{8,}$'
+        )
+
+        if (!phoneNumberRegex.test(this.state.numberPhone)) {
+            this.setState({mess_numberPhone: "Số điện thoại không đúng định dạng!"});
+            isDisabled = true;
+        }
+
+        if (!emailRegex.test(this.state.email)) {
+            this.setState({mess_email: "email không đúng định dạng!"});
+            isDisabled = true;
+        }
+
+        if (!passwordRegex.test(this.state.password)) {
+            this.setState({mess_password: "Phải có ít nhất 8 kí tự, trong đó có ít nhất 1 chữ cái, 1 chữ số và 1 kí tự đặc biệt!"});
+            isDisabled = true;
+        }
+
+        if (this.state.password !== this.state.confirmPassword) {
+            this.setState({mess_confirmPassword: "Mật khẩu nhập lại phải giống với mật khẩu đã nhập!"});
+            isDisabled = true;
+        }
         return !isDisabled;
     }
 
-    handleBlur = (field) => (event) => {
-        this.setState({
-            touched: { ...this.state.touched, [field]: true }
-        });
 
-    }
-
-    validate = (username, email, firstName, lastName, password, confirmPassword, address, city) => {
-        const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-        const firstLastNameRegex = /^[A-Z]([a-zA-Z]+)?$/;
-        const testEmail = emailRegex.test(email)
-        const testFirstName = firstLastNameRegex.test(firstName)
-        const testLastName = firstLastNameRegex.test(lastName)
+    validate = (username, email, firstName, lastName, password, confirmPassword, address, city, gender, numberPhone) => {
         return {
-            username: username.length < 4 || username.length > 16,
-            email: email.length === 0 || !testEmail,
-            firstName: firstName.length === 0 || !testFirstName,
-            lastName: lastName.length === 0 || !testLastName,
-            password: password.length < 4 || password.length > 16,
-            confirmPassword: confirmPassword.length === 0 || confirmPassword !== password,
+            gender: this.state.gender.length === 0,
+            numberPhone: this.state.numberPhone.length === 0,
+            username: username.length === 0,
+            email: email.length === 0,
+            firstName: firstName.length === 0,
+            lastName: lastName.length === 0,
+            password: password.length === 0,
+            confirmPassword: confirmPassword.length === 0,
             address: address.length === 0,
             city: city.length === 0,
+
         }
     }
 
+    handleChangePhoneNumber = (value) => {
+        const phoneNumberRegex = new RegExp(
+            '([\+84|84|0]+(3|5|7|8|9|1[2|6|8|9]))+([0-9]{8})'
+        )
+        this.setState({mess_numberPhone: ""})
+        this.setState({numberPhone: value})
+        if (value && !phoneNumberRegex.test(value)) {
+            this.setState({mess_numberPhone: "Số điện thoại không đúng định dạng!"})
+        }
+    }
+
+    handleChangeEmail = (value) => {
+        const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+        this.setState({mess_email: ""})
+        this.setState({email: value})
+        if (value && !emailRegex.test(value)) {
+            this.setState({mess_email: "Email không đúng định dạng!"})
+        }
+    }
+
+    handleChangePassword = (event) => {
+        const passwordRegex = new RegExp(
+            '^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[.,/;#?!@$%^&*-]).{8,}$'
+        )
+        this.setState({mess_password: ""})
+        this.setState({password: event.target.value})
+        if (event.target.value && !passwordRegex.test(event.target.value)) {
+            this.setState({mess_password: "Phải có ít nhất 8 kí tự, trong đó có ít nhất 1 chữ cái, 1 chữ số và 1 kí tự đặc biệt!"})
+        }
+    };
+
+    handleChangeConfirmPassword = (value) => {
+        this.setState({mess_confirmPassword: ""})
+        this.setState({confirmPassword: value})
+        if (value && !(this.state.password === value)) {
+            this.setState({mess_confirmPassword: "Mật khẩu nhập lại phải giống với mật khẩu đã nhập!"})
+        }
+    }
+
+    handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+
     render() {
-        const { username, email, firstName, lastName, password, confirmPassword, address, city } = this.state;
+        const {username, email, firstName, lastName, password, confirmPassword, address, city} = this.state;
         const errors = this.validate(username, email, firstName, lastName, password, confirmPassword, address, city);
         const isEnabled = !Object.keys(errors).some(x => errors[x])
 
@@ -116,155 +244,245 @@ class RegisterPage extends Component {
 
         return (
             <Fragment>
-                <section className="pt-3">
-                    <div className="container register-form-content-section pb-4 ">
-                        <h1 className="text-center font-weight-bold mt-4" style={{ 'margin': '1rem auto', 'paddingTop': '2rem' }}>Register</h1>
-                        <div className="hr-styles" style={{ 'width': '70%' }}></div>
 
-                        <form className="Register-form-container" onSubmit={this.onSubmitHandler}>
 
-                            <div className="section-container">
-                                <section className="left-section">
-                                    <div className="form-group">
-                                        <label htmlFor="username" >Username</label>
-                                        <input
-                                            type="text"
-                                            className={"form-control " + (shouldMarkError('username') ? "error" : "")}
-                                            id="username"
-                                            name="username"
-                                            value={this.state.username}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('username')}
-                                            aria-describedby="usernameHelp"
-                                            placeholder="Enter username"
-                                        />
-                                        {shouldMarkError('username') && <small id="usernameHelp" className="form-text alert alert-danger"> {(!this.state.username ? 'Username is required!' : 'Username should be at least 4 and maximum 16 characters long!')}</small>}
-                                    </div>
+                <div className="Register">
+                    <div className="Register-container">
+                        <div className="Register-container-header">
+                            <div className="Register-container-header-title">
+                                <h3>Đăng kí</h3>
+                                <p>Tạo tài khoản mạng xã hội Blameo ngay</p>
+                            </div>
+                            <img src={LogoBlameo}/>
+                        </div>
+                        <div className="Register-container-body">
 
-                                    <div className="form-group">
-                                        <label htmlFor="firstName" >First Name</label>
-                                        <input
-                                            type="text"
-                                            className={"form-control " + (shouldMarkError('firstName') ? "error" : "")}
-                                            id="firstName"
-                                            name="firstName"
-                                            value={this.state.firstName}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('firstName')}
-                                            aria-describedby="firstNameHelp"
-                                            placeholder="Enter first name"
-                                        />
-                                        {shouldMarkError('firstName') && <small id="firstNameHelp" className="form-text alert alert-danger">{(!this.state.firstName ? 'First Name is required!' : 'First Name must start with a capital letter and contain only letters!')}</small>}
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="address" >Address</label>
-                                        <input
-                                            type="text"
-                                            className={"form-control " + (shouldMarkError('address') ? "error" : "")}
-                                            id="address"
-                                            name="address"
-                                            value={this.state.address}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('address')}
-                                            aria-describedby="addressHelp"
-                                            placeholder="Enter address"
-                                        />
-                                        {shouldMarkError('address') && <small id="addressHelp" className="form-text alert alert-danger">{(!this.state.address ? 'Address is required!' : '')}</small>}
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="password" >Password</label>
-                                        <input
-                                            type="password"
-                                            className={"form-control " + (shouldMarkError('password') ? "error" : "")}
-                                            id="password"
-                                            name="password"
-                                            value={this.state.password}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('password')}
-                                            aria-describedby="passwordHelp"
-                                            placeholder="Enter password"
-                                        />
-                                        {shouldMarkError('password') && <small id="passwordHelp" className="form-text alert alert-danger">{(!this.state.password ? 'Password is required!' : 'Password should be at least 4 and maximum 16 characters long!')}</small>}
-                                    </div>
-                                </section>
-
-                                <section className="right-section">
-                                    <div className="form-group">
-                                        <label htmlFor="email" >Email Address</label>
-                                        <input
-                                            type="email"
-                                            className={"form-control " + (shouldMarkError('email') ? "error" : "")}
-                                            id="email"
-                                            name="email"
-                                            value={this.state.email}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('email')}
-                                            aria-describedby="emailHelp"
-                                            placeholder="Enter email"
-
-                                        />
-                                        {shouldMarkError('email') && <small id="emailHelp" className="form-text alert alert-danger">{(!this.state.email ? 'Email is required!' : 'Invalid e-mail address!')}</small>}
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="lastName" >Last Name</label>
-                                        <input
-                                            type="text"
-                                            className={"form-control " + (shouldMarkError('lastName') ? "error" : "")}
-                                            id="lastName"
-                                            name="lastName"
-                                            value={this.state.lastName}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('lastName')}
-                                            aria-describedby="lastNameHelp"
-                                            placeholder="Enter last name"
-                                        />
-                                        {shouldMarkError('lastName') && <small id="lastNameHelp" className="form-text alert alert-danger">{(!this.state.lastName ? 'Last Name is required!' : 'Last Name must start with a capital letter and contain only letters!')}</small>}
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="city" >City</label>
-                                        <input
-                                            type="text"
-                                            className={"form-control " + (shouldMarkError('city') ? "error" : "")}
-                                            id="city"
-                                            name="city"
-                                            value={this.state.city}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('city')}
-                                            aria-describedby="cityHelp"
-                                            placeholder="Enter city"
-                                        />
-                                        {shouldMarkError('city') && <small id="cityHelp" className="form-text alert alert-danger">{(!this.state.city ? 'City is required!' : '')}</small>}
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="confirmPassword" >Confirm Password</label>
-                                        <input
-                                            type="password"
-                                            className={"form-control " + (shouldMarkError('confirmPassword') ? "error" : "")}
-                                            id="confirmPassword"
-                                            name="confirmPassword"
-                                            value={this.state.confirmPassword}
-                                            onChange={this.onChangeHandler}
-                                            onBlur={this.handleBlur('confirmPassword')}
-                                            aria-describedby="confirmPasswordHelp"
-                                            placeholder="Confirm your password"
-                                        />
-                                        {shouldMarkError('confirmPassword') && <small id="confirmPasswordHelp" className="form-text alert alert-danger">Passwords do not match!</small>}
-                                    </div>
-                                </section>
+                            <div className="row-2">
+                                <TextField
+                                    error={this.state.mess_firstName}
+                                    id="lastName"
+                                    label="Họ và tên đệm"
+                                    name="firstName"
+                                    size="small"
+                                    maxRows={1}
+                                    value={this.state.firstName}
+                                    helperText={this.state.mess_firstName}
+                                    onChange={this.onChangeHandler}
+                                />
+                                <TextField
+                                    error={this.state.mess_lastName}
+                                    id="firstName"
+                                    label="Tên"
+                                    name="lastName"
+                                    size="small"
+                                    maxRows={1}
+                                    value={this.state.lastName}
+                                    helperText={this.state.mess_lastName}
+                                    onChange={this.onChangeHandler}
+                                />
                             </div>
 
-                            <div className="text-center">
-                                <button disabled={!isEnabled} type="submit" className="btn App-button-primary btn-lg m-3">Register</button>
+                            <div className="row-2">
+                                <Box sx={{width: 226, height: 40}}>
+                                    <FormControl fullWidth size="small" error={this.state.mess_gender ? true : false}>
+                                        <InputLabel id="gender">Giới tính</InputLabel>
+                                        <Select
+                                            labelId="gender"
+                                            id="gender-select"
+                                            name="gender"
+                                            value={this.state.gender}
+                                            label="Giới tính"
+                                            onChange={this.onChangeHandler}
+                                        >
+                                            <MenuItem value={'MALE'}>Nam</MenuItem>
+                                            <MenuItem value={'FEMALE'}>Nữ</MenuItem>
+                                            <MenuItem value={'UNKNOWN'}>Khác</MenuItem>
+                                        </Select>
+                                        <FormHelperText>{this.state.mess_gender}</FormHelperText>
+                                    </FormControl>
+                                </Box>
+                                <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={viLocale}>
+                                    <DatePicker
+                                        disableFuture
+                                        openTo="year"
+                                        views={['year', 'month', 'day']}
+                                        label="Ngày sinh"
+                                        maxDate={new Date().setMonth(new Date().getMonth())}
+                                        value={this.state.birthday}
+                                        onChange={(newValue) => {
+                                            this.setState({birthday: newValue});
+                                        }}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </LocalizationProvider>
                             </div>
-                        </form>
+
+                            <div className="row-2">
+                                <TextField
+                                    error={this.state.mess_numberPhone}
+                                    id="phonenumber"
+                                    label="Số điện thoại"
+                                    size="small"
+                                    maxRows={1}
+                                    value={this.state.numberPhone}
+                                    helperText={this.state.mess_numberPhone}
+                                    onChange={(e) => this.handleChangePhoneNumber(e.target.value)}
+                                />
+                                <TextField
+                                    error={this.state.mess_email}
+                                    id="email"
+                                    label="Email"
+                                    size="small"
+                                    maxRows={1}
+                                    value={this.state.email}
+                                    helperText={this.state.mess_email}
+                                    onChange={(e) => this.handleChangeEmail(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="row-1">
+                                <TextField
+                                    error={this.state.mess_username.length}
+                                    id="username"
+                                    label="Tên tài khoản"
+                                    sx={{width: '100%', height: 20}}
+                                    name="username"
+                                    maxRows={1}
+                                    value={this.state.username}
+                                    helperText={this.state.mess_username}
+                                    onChange={this.onChangeHandler}
+                                />
+                            </div>
+
+                            <div className="row-1">
+                                <TextField
+                                    error={this.state.mess_address.length}
+                                    id="address"
+                                    label="Địa chỉ"
+                                    sx={{width: '100%', height: 20}}
+                                    name="address"
+                                    maxRows={1}
+                                    value={this.state.address}
+                                    helperText={this.state.mess_address}
+                                    onChange={this.onChangeHandler}
+                                />
+                            </div>
+
+                            <div className="row-1">
+                                <TextField
+                                    error={this.state.mess_city.length}
+                                    id="city"
+                                    label="Tỉnh/Thành phố"
+                                    sx={{width: '100%', height: 20}}
+                                    name="city"
+                                    maxRows={1}
+                                    value={this.state.city}
+                                    helperText={this.state.mess_city}
+                                    onChange={this.onChangeHandler}
+                                />
+                            </div>
+
+                            <div className="row-1">
+
+                                <FormControl sx={{width: '100%'}} variant="outlined"
+                                             error={this.state.mess_password}
+
+                                >
+                                    <InputLabel htmlFor="password">Mật khẩu</InputLabel>
+                                    <OutlinedInput
+                                        id="password"
+                                        type={this.state.showPassword ? 'text' : 'password'}
+                                        value={this.state.password}
+                                        onChange={this.handleChangePassword}
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={() => this.setState({showPassword: !this.state.showPassword})}
+                                                    onMouseDown={this.handleMouseDownPassword}
+                                                    edge="end"
+                                                >
+                                                    {this.state.showPassword ? <VisibilityOff/> : <Visibility/>}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                        label="Password"
+                                    />
+                                    <FormHelperText id="helper-text">{this.state.mess_password}</FormHelperText>
+                                </FormControl>
+                            </div>
+
+                            <div className="row-1">
+
+                                <FormControl sx={{width: '100%'}} variant="outlined"
+                                             error={this.state.mess_confirmPassword}
+                                >
+
+                                    <InputLabel htmlFor="confirm-password">Nhập lại mật khẩu</InputLabel>
+                                    <OutlinedInput
+
+                                        id="confirm-password"
+                                        type={this.state.showPasswordConfirm ? 'text' : 'password'}
+                                        value={confirmPassword}
+                                        onChange={(e) => this.handleChangeConfirmPassword(e.target.value)}
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={() => this.setState({showPasswordConfirm: !this.state.showPasswordConfirm})}
+                                                    onMouseDown={this.handleMouseDownPassword}
+                                                    edge="end"
+                                                >
+                                                    {this.state.showPasswordConfirm ? <VisibilityOff/> : <Visibility/>}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                        label="Nhập lại mật khẩu"
+                                    />
+                                    <FormHelperText id="helper-text">{this.state.mess_confirmPassword}</FormHelperText>
+                                </FormControl>
+                            </div>
+
+                            <Button sx={{backgroundColor: '#52BDA1'}} color="success" variant="contained"
+                                    onClick={this.onSubmitHandler}>Tạo tài khoản</Button>
+                            <div className="m-2">
+                                <div className="fw-lg">Bạn đã có tài khoản ! <span className="lg-now"
+                                                                                   onClick={() => this.props.history.push('/login')}>Đăng nhập ngay</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                </section>
+                </div>
+                <div>
+                    <Backdrop
+                        sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+                        open={this.state.backdrop}
+                    >
+                        <CircularProgress color="inherit"/>
+                    </Backdrop>
+                </div>
+                <Dialog
+                    open={this.state.dialog}
+                    onClose={() => this.setState({dialog: false})}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title"
+                                 sx={{backgroundColor: '#52BDA1', fontWeight: 'bold', color: 'white'}}>
+                        {"Tạo tài khoản thành công !"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            <p className="dialog-message"> Cảm ơn bạn đã đăng kí tài khoản của Blameo !</p>
+                            <p className="dialog-message">Giờ đây bạn có thể sử dụng tài khoản này để đăng nhập vào hệ
+                                thống của Blameo</p>
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => this.props.history.push('/login')}>Đăng nhập ngay</Button>
+                        <Button onClick={() => this.setState({dialog: false})}>OK</Button>
+                    </DialogActions>
+                </Dialog>
             </Fragment>
         )
     }
