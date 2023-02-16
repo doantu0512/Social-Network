@@ -55,7 +55,16 @@ $ npm start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
+### **Option 2 - Use yarn **
+Install all dependencies:
+```bash
+$ yarn install
+```
+Run the app in the development mode:
+```bash
+$ yarn start
+```
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 #### 2. Start the Server
 
 Go to the root directory of the Spring Boot app:
@@ -72,7 +81,7 @@ $ mvn spring-boot:run
 The Server is running on port `8000`.
 
 
-### **Option 2 - Start the application in Docker**
+### **Option 3 - Start the application in Docker**
 
 1. **Start the application**
 

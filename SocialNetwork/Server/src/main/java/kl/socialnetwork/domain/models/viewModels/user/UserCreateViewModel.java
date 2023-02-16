@@ -8,8 +8,11 @@ public class UserCreateViewModel {
     private String lastName;
     private String address;
     private String city;
+    private String numberPhone;
+    private String gender;
 
-    public UserCreateViewModel() { }
+    public UserCreateViewModel() {
+    }
 
     public String getUsername() {
         return this.username;
@@ -65,5 +68,21 @@ public class UserCreateViewModel {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getNumberPhone() {
+        return numberPhone;
+    }
+
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

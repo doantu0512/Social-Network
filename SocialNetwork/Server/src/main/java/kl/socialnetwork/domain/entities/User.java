@@ -19,6 +19,9 @@ public class User extends BaseEntity implements UserDetails {
     private String lastName;
     private String address;
     private String city;
+
+    private String numberPhone;
+    private String gender;
     private boolean isDeleted;
     private Set<UserRole> authorities;
     private String profilePicUrl;
@@ -115,7 +118,30 @@ public class User extends BaseEntity implements UserDetails {
         this.city = city;
     }
 
-    @Column(name = "is_deleted", nullable = false , columnDefinition = "BOOLEAN DEFAULT FALSE")
+//    public User(String numberPhone, String gender) {
+//        this.numberPhone = numberPhone;
+//        this.gender = gender;
+//    }
+
+    @Column(name = "numberPhone", nullable = false)
+    public String getNumberPhone() {
+        return this.numberPhone;
+    }
+
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
+    }
+
+    @Column(name = "gender", nullable = false)
+    public String getGender() {
+        return this.gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     public boolean isDeleted() {
         return this.isDeleted;
     }
@@ -124,7 +150,7 @@ public class User extends BaseEntity implements UserDetails {
         isDeleted = deleted;
     }
 
-    @Column(name = "is_online", nullable = false , columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(name = "is_online", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     public boolean isOnline() {
         return this.isOnline;
     }
@@ -133,7 +159,7 @@ public class User extends BaseEntity implements UserDetails {
         isOnline = online;
     }
 
-    @Column(name="profile_pic_url", columnDefinition = "TEXT")
+    @Column(name = "profile_pic_url", columnDefinition = "TEXT")
     public String getProfilePicUrl() {
         return this.profilePicUrl;
     }
@@ -142,7 +168,7 @@ public class User extends BaseEntity implements UserDetails {
         this.profilePicUrl = profilePicUrl;
     }
 
-    @Column(name="background_image_url", columnDefinition = "TEXT")
+    @Column(name = "background_image_url", columnDefinition = "TEXT")
     public String getBackgroundImageUrl() {
         return this.backgroundImageUrl;
     }
@@ -153,7 +179,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinTable(name="users_roles",
+    @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     public Set<UserRole> getAuthorities() {
@@ -182,7 +208,7 @@ public class User extends BaseEntity implements UserDetails {
         this.relationshipsUserTwo = relationshipsUserTwo;
     }
 
-    @OneToMany(mappedBy = "actionUser",  cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "actionUser", cascade = CascadeType.ALL)
     public List<Relationship> getRelationshipsActionUser() {
         return this.relationshipsActionUser;
     }
@@ -264,7 +290,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-    @Column(name = "is_account_non_expired", nullable = false , columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Column(name = "is_account_non_expired", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -274,7 +300,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-    @Column(name = "is_account_non_locked", nullable = false , columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Column(name = "is_account_non_locked", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     public boolean isAccountNonLocked() {
         return true;
     }
@@ -284,7 +310,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-    @Column(name = "is_credentials_non_expired", nullable = false , columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Column(name = "is_credentials_non_expired", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     public boolean isCredentialsNonExpired() {
         return true;
     }
@@ -294,7 +320,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-    @Column(name = "is_enabled", nullable = false , columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Column(name = "is_enabled", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     public boolean isEnabled() {
         return true;
     }

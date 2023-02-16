@@ -14,6 +14,25 @@ public class UserServiceModel implements Serializable {
     private String lastName;
     private String address;
     private String city;
+
+    public String getNumberPhone() {
+        return numberPhone;
+    }
+
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    private String numberPhone;
+    private String gender;
     private String username;
     private String profilePicUrl;
     private String backgroundImageUrl;
