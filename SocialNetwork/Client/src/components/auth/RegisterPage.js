@@ -259,7 +259,7 @@ class RegisterPage extends Component {
 
                             <div className="row-2">
                                 <TextField
-                                    error={this.state.mess_firstName}
+                                    error={this.state.mess_firstName.length!==0}
                                     id="lastName"
                                     label="Họ và tên đệm"
                                     name="firstName"
@@ -270,7 +270,7 @@ class RegisterPage extends Component {
                                     onChange={this.onChangeHandler}
                                 />
                                 <TextField
-                                    error={this.state.mess_lastName}
+                                    error={this.state.mess_lastName.length!==0}
                                     id="firstName"
                                     label="Tên"
                                     name="lastName"
@@ -284,7 +284,7 @@ class RegisterPage extends Component {
 
                             <div className="row-2">
                                 <Box sx={{width: 226, height: 40}}>
-                                    <FormControl fullWidth size="small" error={this.state.mess_gender ? true : false}>
+                                    <FormControl fullWidth size="small" error={this.state.mess_gender.length!==0}>
                                         <InputLabel id="gender">Giới tính</InputLabel>
                                         <Select
                                             labelId="gender"
@@ -319,7 +319,7 @@ class RegisterPage extends Component {
 
                             <div className="row-2">
                                 <TextField
-                                    error={this.state.mess_numberPhone}
+                                    error={this.state.mess_numberPhone.length!==0}
                                     id="phonenumber"
                                     label="Số điện thoại"
                                     size="small"
@@ -329,7 +329,7 @@ class RegisterPage extends Component {
                                     onChange={(e) => this.handleChangePhoneNumber(e.target.value)}
                                 />
                                 <TextField
-                                    error={this.state.mess_email}
+                                    error={this.state.mess_email.length!==0}
                                     id="email"
                                     label="Email"
                                     size="small"
@@ -342,7 +342,7 @@ class RegisterPage extends Component {
 
                             <div className="row-1">
                                 <TextField
-                                    error={this.state.mess_username.length}
+                                    error={this.state.mess_username.length!==0}
                                     id="username"
                                     label="Tên tài khoản"
                                     sx={{width: '100%', height: 20}}
@@ -356,7 +356,7 @@ class RegisterPage extends Component {
 
                             <div className="row-1">
                                 <TextField
-                                    error={this.state.mess_address.length}
+                                    error={this.state.mess_address.length!==0}
                                     id="address"
                                     label="Địa chỉ"
                                     sx={{width: '100%', height: 20}}
@@ -370,7 +370,7 @@ class RegisterPage extends Component {
 
                             <div className="row-1">
                                 <TextField
-                                    error={this.state.mess_city.length}
+                                    error={this.state.mess_city.length!==0}
                                     id="city"
                                     label="Tỉnh/Thành phố"
                                     sx={{width: '100%', height: 20}}
@@ -385,7 +385,7 @@ class RegisterPage extends Component {
                             <div className="row-1">
 
                                 <FormControl sx={{width: '100%'}} variant="outlined"
-                                             error={this.state.mess_password}
+                                             error={this.state.mess_password.length!==0}
 
                                 >
                                     <InputLabel htmlFor="password">Mật khẩu</InputLabel>
@@ -415,7 +415,7 @@ class RegisterPage extends Component {
                             <div className="row-1">
 
                                 <FormControl sx={{width: '100%'}} variant="outlined"
-                                             error={this.state.mess_confirmPassword}
+                                             error={this.state.mess_confirmPassword.length!==0}
                                 >
 
                                     <InputLabel htmlFor="confirm-password">Nhập lại mật khẩu</InputLabel>
