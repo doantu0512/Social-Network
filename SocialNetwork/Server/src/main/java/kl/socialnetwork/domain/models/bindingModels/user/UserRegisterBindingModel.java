@@ -1,5 +1,6 @@
 package kl.socialnetwork.domain.models.bindingModels.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import kl.socialnetwork.utils.constants.ValidationMessageConstants;
 import kl.socialnetwork.validations.annotations.Password;
 import kl.socialnetwork.validations.annotations.PasswordMatching;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @PasswordMatching
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRegisterBindingModel implements Serializable {
     private String username;
     private String email;
