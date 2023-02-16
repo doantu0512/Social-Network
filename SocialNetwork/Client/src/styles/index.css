@@ -35,6 +35,10 @@ code {
 }
 
 .App-footer{
+  display: flex;
   margin-top: auto;
+  background-color: #282c34;
+  justify-content: center;
+  align-items: center;
 }
 

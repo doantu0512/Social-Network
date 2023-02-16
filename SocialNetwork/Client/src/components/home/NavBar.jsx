@@ -148,6 +148,7 @@ class Navbar extends Component {
         const isRoot = userService.isRoot();
         const userId = userService.getUserId();
 
+
         const { loggedIn, onLogout } = this.props;
         const showDropdown = this.state.showDropdown;
         let pathname = this.props.location.pathname !== "/";
@@ -182,7 +183,9 @@ class Navbar extends Component {
         }
 
         return (
+            !loggedIn?'':
             <Fragment >
+
                 <input type="checkbox" name="main-nav-toggle" id="main-nav-toggle" />
                 <header className="site-header">
                     <section className="navbar-section">
