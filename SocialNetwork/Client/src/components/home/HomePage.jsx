@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import { fetchPicturesAction } from '../../store/actions/pictureActions';
 import { fetchAllUnreadMessagesAction } from '../../store/actions/messageActions';
 import { fetchLoggedInUserAction, fetchTimeLineUserAction, fetchAllFriendsAction, findFriendsAction } from '../../store/actions/userActions';
+import {TabTitle} from "../../hocs/GeneralFunction";
 
 const UserSearchResultsPage = lazy(() => import('../user/UserSearchResultsPage'));
 const UserProfilePage = lazy(() => import('../user/UserProfilePage'));
@@ -113,6 +114,7 @@ class HomePage extends Component {
     }
 
     render() {
+        TabTitle("Blameo")
         const isRoot = userService.isRoot();
         const isAdmin = userService.isAdmin();
         const isTheCurrentLoggedInUser = this.props.loggedInUserData.id === this.props.timeLineUserData.id;

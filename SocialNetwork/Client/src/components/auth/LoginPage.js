@@ -7,6 +7,7 @@ import LogoBlameo from '../../assets/images/blameo_logo-no_bg.png'
 import './css/login.css'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import {TabTitle} from "../../hocs/GeneralFunction";
 class FluidInput extends React.Component {
     constructor(props) {
         super(props);
@@ -74,6 +75,9 @@ class Buttonlg extends React.Component {
 
 
 class LoginPage extends Component {
+
+
+
     constructor(props) {
         super(props)
 
@@ -130,18 +134,6 @@ class LoginPage extends Component {
         }
     }
 
-    canBeSubmitted() {
-        const { username, password } = this.state;
-        const errors = this.validate(username, password);
-        const isDisabled = Object.keys(errors).some(x => errors[x])
-        return !isDisabled;
-    }
-
-    handleBlur = (field) => (event) => {
-        this.setState({
-            touched: { ...this.state.touched, [field]: true }
-        });
-    }
 
     validate = (username, password) => {
         return {
@@ -155,6 +147,8 @@ class LoginPage extends Component {
     };
 
     render() {
+
+        TabTitle("Blameo | Login")
         const { username, password } = this.state;
         const errors = this.validate(username, password);
         const isEnabled = !Object.keys(errors).some(x => errors[x])
