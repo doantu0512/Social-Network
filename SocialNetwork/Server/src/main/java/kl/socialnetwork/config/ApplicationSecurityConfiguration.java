@@ -57,7 +57,8 @@ public class ApplicationSecurityConfiguration
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js"
+                        "/**/*.js",
+                        "/storage/post-image/*"
                 ).permitAll()
                 .antMatchers(
                         "/users/details/*",
