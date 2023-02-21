@@ -1,5 +1,4 @@
 package kl.socialnetwork.domain.models.viewModels.post;
-
 import kl.socialnetwork.domain.models.viewModels.comment.CommentAllViewModel;
 
 import java.time.LocalDateTime;
@@ -17,6 +16,7 @@ public class PostAllViewModel {
     private int likeCount;
     private LocalDateTime time;
     private List<CommentAllViewModel> commentList;
+    private List<PostImageViewModel> postImages;
 
     public PostAllViewModel() {
     }
@@ -107,5 +107,13 @@ public class PostAllViewModel {
 
     public void setCommentList(List<CommentAllViewModel> commentList) {
         this.commentList = commentList;
+    }
+
+    public List<PostImageViewModel> getPostImages() {
+        return postImages;
+    }
+
+    public void setPostImages(List<PostImageViewModel> postImages) {
+        this.postImages = postImages;
     }
 }
