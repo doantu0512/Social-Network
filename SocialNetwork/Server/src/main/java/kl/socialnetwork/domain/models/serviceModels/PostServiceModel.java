@@ -2,6 +2,7 @@ package kl.socialnetwork.domain.models.serviceModels;
 
 import kl.socialnetwork.domain.entities.Comment;
 import kl.socialnetwork.domain.entities.Like;
+import kl.socialnetwork.domain.entities.PostImages;
 import kl.socialnetwork.domain.entities.User;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ public class PostServiceModel {
     private LocalDateTime time;
     private List<Like> like;
     private List<Comment> commentList;
+    private List<PostImages> postImages;
 
 
     public PostServiceModel() {
@@ -83,5 +85,13 @@ public class PostServiceModel {
 
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
+    }
+
+    public List<PostImages> getPostImages() {
+        return postImages;
+    }
+
+    public void setPostImages(List<PostImages> postImages) {
+        this.postImages = postImages;
     }
 }

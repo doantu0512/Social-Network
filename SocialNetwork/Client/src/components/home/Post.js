@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 import { userService } from '../../infrastructure';
 import Comment from './Comment';
+import Photogrid from "react-facebook-photo-grid";
 
 const Post = (props) => {
     const imageClass = userService.getImageSize(props.imageUrl);
     const imageClassUserPick = userService.getImageSize(props.loggedInUserProfilePicUrl);
-
+    const images = props.postImages.map((value=>value))
     let isRoot = userService.isRoot();
     let isPostCreator = (props.loggedInUserId === props.currentLoggedInUserId);
     let isTimeLineUser = (props.timelineUserId === props.currentLoggedInUserId);
@@ -16,9 +17,10 @@ const Post = (props) => {
     const minute = props.time.minute < 10 ? '0' + props.time.minute : props.time.minute;
 
     const formattedName = userService.formatUsername(props.loggedInUserFirstName, props.loggedInUserLastName);
-
     return (
         <Fragment>
+
+
             <div className="post-wrapper" id="container">
                 <div className="post-content-article-header ">
                     <div className="post-content-article-image">
@@ -33,9 +35,16 @@ const Post = (props) => {
                     <p className="">{props.content} </p>
                 </div>
 
-                {props.imageUrl && <div className="post-media">
-                    <img className={imageClass} src={props.imageUrl} alt="Futurama" />
-                </div>}
+                <div>
+                    <img src="../../../../../Storage/1676950074161-IMG_20200908_202915.jpg"/>
+                    {images.map(value=><img src={"../../../../Storage/"+value.imageUrl}/>)}
+                    <Photogrid
+                        images={images} //required
+                        // width={600} //optional according to your need
+                        maxWidth={400} //optional according to your need
+                    ></Photogrid>
+
+                </div>
 
                 <div className="post-footer">
                     <div className="post-left-side-icons-container">

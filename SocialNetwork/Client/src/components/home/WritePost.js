@@ -10,6 +10,7 @@ export default class WritePost extends Component {
             content: '',
             imageUrl: '',
             createPostData: '',
+            images:[],
             touched: {
                 content: false,
             }
@@ -36,14 +37,24 @@ export default class WritePost extends Component {
         this.setState({loggedInUserProfilePicUrl: userdata.profilePicUrl})
     }
 
+    onSelectFile = (e)=>{
+
+        if (!e.target.files || e.target.files.length === 0) {
+
+            return
+        }
+            this.setState({images:[...this.state.images,...e.target.files]})
+        console.log(this.state.images)
+    }
+
     onSubmitHandler(event) {
         event.preventDefault();
         if (!this.canBeSubmitted()) {
             return;
         }
 
-        const { content, imageUrl } = this.state;
-        this.props.createPost(content, imageUrl);
+        const { content, images } = this.state;
+        this.props.createPost(content, images);
     }
 
     onChangeHandler(event) {
@@ -106,11 +117,10 @@ export default class WritePost extends Component {
                                         >
                                         </TextareaAutosize>
                                     </div>
-
+                                    <input type='file' onChange={this.onSelectFile} id="img" className='custom-file-input' name="img" accept="image/*" multiple/>
                                     <div className="text-center">
                                         <button disabled={!isEnabled} style={{ 'visibility': `${displayButon}` }} type="submit" className="btn uiButtonGroup post-button-fbPhotoCurationControl App-button-primary ">POST</button>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
