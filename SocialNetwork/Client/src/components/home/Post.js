@@ -6,7 +6,7 @@ import Photogrid from "react-facebook-photo-grid";
 const Post = (props) => {
     const imageClass = userService.getImageSize(props.imageUrl);
     const imageClassUserPick = userService.getImageSize(props.loggedInUserProfilePicUrl);
-    const images = props.postImages.map((value=>value))
+    const images = props.postImages.map((value=>"http://localhost:8080/storage/post-image/"+value.imageUrl))
     let isRoot = userService.isRoot();
     let isPostCreator = (props.loggedInUserId === props.currentLoggedInUserId);
     let isTimeLineUser = (props.timelineUserId === props.currentLoggedInUserId);
@@ -19,8 +19,6 @@ const Post = (props) => {
     const formattedName = userService.formatUsername(props.loggedInUserFirstName, props.loggedInUserLastName);
     return (
         <Fragment>
-
-
             <div className="post-wrapper" id="container">
                 <div className="post-content-article-header ">
                     <div className="post-content-article-image">
@@ -36,12 +34,11 @@ const Post = (props) => {
                 </div>
 
                 <div>
-                    <img src="../../../../../Storage/1676950074161-IMG_20200908_202915.jpg"/>
-                    {images.map(value=><img src={"../../../../Storage/"+value.imageUrl}/>)}
+
                     <Photogrid
                         images={images} //required
                         // width={600} //optional according to your need
-                        maxWidth={400} //optional according to your need
+                        maxWidth={800} //optional according to your need
                     ></Photogrid>
 
                 </div>
