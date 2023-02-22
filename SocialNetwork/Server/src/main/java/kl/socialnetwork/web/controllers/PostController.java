@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -23,6 +24,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static kl.socialnetwork.utils.constants.ResponseMessageConstants.*;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController()
 @RequestMapping(value = "/post")
@@ -40,8 +42,8 @@ public class PostController {
     }
 
     @PostMapping (value = "/create")
-    public ResponseEntity<Object> createPost(@RequestBody @Valid PostCreateBindingModel postCreateBindingModel, Authentication principal) throws Exception {
-        boolean post = this.postService.createPost(postCreateBindingModel);
+    public ResponseEntity<Object> createPost(@RequestParam (required = false) MultipartFile[] images,@Valid PostCreateBindingModel postCreateBindingModel, Authentication principal) throws Exception {
+        boolean post = this.postService.createPost(postCreateBindingModel,images);
         if (post) {
             SuccessResponse successResponse = new SuccessResponse(LocalDateTime.now(), SUCCESSFUL_CREATE_POST_MESSAGE, " ", true);
             return new ResponseEntity<>(this.objectMapper.writeValueAsString(successResponse), HttpStatus.OK);

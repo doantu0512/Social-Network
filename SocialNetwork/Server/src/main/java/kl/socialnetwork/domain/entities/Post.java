@@ -14,6 +14,7 @@ public class Post extends BaseEntity {
     private LocalDateTime time;
     private List<Like> like;
     private List<Comment> commentList;
+    private List<PostImages> postImages;
 
     public Post() {
     }
@@ -38,7 +39,7 @@ public class Post extends BaseEntity {
         this.timelineUser = timelineUser;
     }
 
-    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "content", columnDefinition = "TEXT")
     public String getContent() {
         return this.content;
     }
@@ -63,6 +64,15 @@ public class Post extends BaseEntity {
 
     public void setLike(List<Like> like) {
         this.like = like;
+    }
+
+    @OneToMany(targetEntity = PostImages.class, mappedBy = "post", cascade = CascadeType.ALL)
+    public List<PostImages> getPostImages() {
+        return this.postImages;
+    }
+
+    public void setPostImages(List<PostImages> postImages) {
+        this.postImages = postImages;
     }
 
     @OneToMany(targetEntity = Comment.class, mappedBy = "post", cascade = CascadeType.ALL)

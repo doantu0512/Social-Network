@@ -30,11 +30,16 @@ const createPostError = (error, message, status, path) => {
     }
 }
 
-const createPostAction = (timelineUserId, loggedInUserId, content, imageUrl) => {
-    const requestBody = { timelineUserId, loggedInUserId, content, imageUrl }
+const createPostAction = (timelineUserId, loggedInUserId, content, images) => {
+    const FormData = require('form-data');
+    let data = new FormData();
+    images.forEach((value)=> data.append('images',value))
+    data.append('timelineUserId', timelineUserId);
+    data.append('loggedInUserId', loggedInUserId);
+    data.append('content', content);
     return (dispatch) => {
         dispatch(createPostBegin())
-        return requester.post('/post/create', requestBody, (response) => {
+        return requester.addPhoto('/post/create', data, (response) => {
             if (response.error) {
                 const { error, message, status, path } = response;
                 dispatch(createPostError(error, message, status, path));

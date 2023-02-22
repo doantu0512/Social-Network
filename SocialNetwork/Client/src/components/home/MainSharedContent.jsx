@@ -137,10 +137,10 @@ class MainSharedContent extends Component {
         this.props.loadAllPosts(timelineUserId);
     }
 
-    createPost(content, imageUrl) {
+    createPost(content, images) {
         const loggedInUserId = this.props.loggedInUser.id;
         const timelineUserId = this.props.timeLineUser.id;
-        this.props.createPost(timelineUserId, loggedInUserId, content, imageUrl);
+        this.props.createPost(timelineUserId, loggedInUserId, content, images);
     }
 
     createComment(postId, content, imageUrl) {
@@ -187,6 +187,7 @@ class MainSharedContent extends Component {
                         {this.state.allPostsArr.map((post, index) =>
                             <Fragment key={post.postId}>
                                 <Post
+                                    postImages={this.postImages}
                                     addLike={this.addLike}
                                     removePost={this.removePost}
                                     addLikeComment={this.addLikeComment}
@@ -235,7 +236,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadAllPosts: (userId) => { dispatch(fetchAllPostsAction(userId)) },
-        createPost: (loggedInUserId, postId, timelineUserId) => { dispatch(createPostAction(loggedInUserId, postId, timelineUserId)) },
+        createPost: (loggedInUserId, postId, timelineUserId,images) => { dispatch(createPostAction(loggedInUserId, postId, timelineUserId,images)) },
         removePost: (loggedInUserId, postId, timelineUserId) => { dispatch(removePostAction(loggedInUserId, postId, timelineUserId)) },
         addLikePost: (loggedInUserId, postId, timelineUserId) => { dispatch(addLikePostAction(loggedInUserId, postId, timelineUserId)) },
         createComment: (postId, loggedInUserId, timelineUserId, content, imageUrl) => { dispatch(createCommentAction(postId, loggedInUserId, timelineUserId, content, imageUrl)) },

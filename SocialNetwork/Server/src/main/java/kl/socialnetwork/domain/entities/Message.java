@@ -13,6 +13,7 @@ public class Message extends BaseEntity{
     private String content;
     private int status;
     private LocalDateTime time;
+    private String type;
 
     public Message() {
     }
@@ -63,6 +64,15 @@ public class Message extends BaseEntity{
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Column(name = "type", nullable = false,columnDefinition = "ENUM('TEXT','IMAGE','FILE')")
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Column(name = "status", columnDefinition = "TINYINT DEFAULT 0")

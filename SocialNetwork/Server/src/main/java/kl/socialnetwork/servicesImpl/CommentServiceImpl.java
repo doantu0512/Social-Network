@@ -79,10 +79,10 @@ public class CommentServiceImpl implements CommentService {
         commentServiceModel.setContent(commentCreateBindingModel.getContent());
         commentServiceModel.setTime(LocalDateTime.now());
         commentServiceModel.setImageUrl(commentCreateBindingModel.getImageUrl());
-
+        commentServiceModel.setType("TEXT");
         Comment comment = this.modelMapper.map(commentServiceModel, Comment.class);
-
-        return this.commentRepository.save(comment) != null;
+        commentRepository.save(comment);
+        return true;
     }
 
     @Async

@@ -12,6 +12,7 @@ public class Comment extends BaseEntity {
     private String content;
     private LocalDateTime time;
     private String imageUrl;
+    private String type;
 
     public Comment() {
     }
@@ -71,5 +72,14 @@ public class Comment extends BaseEntity {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @Column(name = "type", nullable = false, columnDefinition = "VARCHAR(50)")
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
