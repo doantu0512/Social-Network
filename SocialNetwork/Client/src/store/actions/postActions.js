@@ -37,11 +37,6 @@ const createPostAction = (timelineUserId, loggedInUserId, content, images) => {
     data.append('timelineUserId', timelineUserId);
     data.append('loggedInUserId', loggedInUserId);
     data.append('content', content);
-
-    console.log("==========images3",images)
-
-    console.log(...data)
-
     return (dispatch) => {
         dispatch(createPostBegin())
         return requester.addPhoto('/post/create', data, (response) => {

@@ -32,8 +32,6 @@ public class PostCreateBindingModel {
         this.loggedInUserId = loggedInUserId;
     }
 
-    @NotNull
-    @NotEmpty
     public String getContent() {
         return this.content;
     }

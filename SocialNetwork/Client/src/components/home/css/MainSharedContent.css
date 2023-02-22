@@ -43,6 +43,7 @@ main .main-article-shared-content {
 .post-image {
     /* flex: 0 0 7%; */
     width: 3rem;
+    margin-right: 2rem;
     position: relative;
     overflow: hidden;
     border-radius: 50%;
@@ -100,11 +101,11 @@ main .main-article-shared-content {
     width: 100%
 }
 
-.post-textarea{
+.post-textarea {
     overflow: hidden;
-    border: none; 
+    border: none;
     outline: none;
-    resize: none ; 
+    resize: none;
     width: 90%;
     margin-left: 1rem;
     padding: 0.8rem 0.3rem;
@@ -112,21 +113,22 @@ main .main-article-shared-content {
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-#post-textarea-form-group{
-        margin-bottom: 0rem;
-        margin-top: 0.1rem;
+#post-textarea-form-group {
+    margin-bottom: 0rem;
+    margin-top: 0.1rem;
 }
 
 /* ################################################################ */
 /* Post display */
 
 .post-content-section {
-    width: 100%;
+    /*width: 100%;*/
+    width: 45rem;
     border-radius: 5px;
     /* box-shadow: 0 0 14px 1px rgba(0, 0, 0, 0.3); */
 }
 
-.post-wrapper{
+.post-wrapper {
     background: white;
     border-radius: 5px;
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3);
@@ -176,12 +178,12 @@ main .main-article-shared-content {
     transform: translate(-50%, -50%);
 }
 
-.post-content-article-image img.l{
+.post-content-article-image img.l {
     display: block;
     position: absolute;
     top: 0;
     left: 0;
-    width: auto; 
+    width: auto;
     height: 100%;
     top: 50%;
     left: 50%;
@@ -206,12 +208,12 @@ main .main-article-shared-content {
     color: rgb(192, 192, 192);
 }
 
-.post-content{
+.post-content {
     padding: 1.5rem;
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3);
 }
 
-.post-content>p{
+.post-content > p {
     word-break: break-all;
 }
 
@@ -250,13 +252,13 @@ main .main-article-shared-content {
     align-items: center;
 }
 
-.post-left-side-icons-container ul li.like-icon{
+.post-left-side-icons-container ul li.like-icon {
     padding-right: 0.3rem;
     border: none;
     outline: none;
 }
 
-.post-left-side-icons-container ul li.like-count{
+.post-left-side-icons-container ul li.like-count {
     padding-left: 0;
     font-size: 1.3rem;
     font-weight: bold;
@@ -279,17 +281,17 @@ main .main-article-shared-content {
     color: rgb(192, 192, 192);
 }
 
-.like-button{
+.like-button {
     border: none;
     background: none;
     outline: none;
     border: none;
 }
 
-.like-button i:hover{
+.like-button i:hover {
     cursor: pointer;
     color: #40a3f4;
-    outline:none;
+    outline: none;
     border: none;
 }
 
@@ -319,6 +321,7 @@ main .main-article-shared-content {
 .fbPhotoCurationControl .uiButtonGroup {
     border: none;
 }
+
 .uiButtonGroup {
     border-radius: 3px;
     display: inline-block;
@@ -328,15 +331,15 @@ main .main-article-shared-content {
     padding: 2px 9px 4px 8px;
 }
 
-.delete-button{
+.delete-button {
     background-clip: padding-box;
     background-color: rgb(246, 84, 50);
-    color:white;
+    color: white;
 }
 
-.delete-button:hover{
+.delete-button:hover {
     background-color: rgb(167, 28, 19);
-    color:white;
+    color: white;
 }
 
 .post-button-fbPhotoCurationControl {
@@ -350,5 +353,44 @@ main .main-article-shared-content {
     opacity: 1;
 }
 
+.p-content {
+    width: 38rem;
+    height: 3rem;
+    background-color: #F0F2F5;
+    border-radius: 3rem;
+    padding: 0 10px;
+    line-height: 3rem;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+}
 
+.p-content:hover {
+    background-color: #d7dadc;
+}
 
+.lst-post-image > img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+}
+
+.lst-post-image {
+    height: 100%;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    background-color: #e3e3e3;
+}
+
+.modal-post {
+    max-height: 30rem;
+}
+.slick-prev:before,.slick-next:before{
+    color: rgb(196, 196, 196);
+    font-size:30px;
+    border-radius:50%;
+}
