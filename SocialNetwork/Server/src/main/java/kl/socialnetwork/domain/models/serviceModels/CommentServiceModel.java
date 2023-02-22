@@ -13,6 +13,7 @@ public class CommentServiceModel {
     private String content;
     private LocalDateTime time;
     private String imageUrl;
+    private String type;
 
     public CommentServiceModel() {
     }
@@ -71,5 +72,13 @@ public class CommentServiceModel {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

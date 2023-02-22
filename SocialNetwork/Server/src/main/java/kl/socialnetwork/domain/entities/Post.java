@@ -39,7 +39,7 @@ public class Post extends BaseEntity {
         this.timelineUser = timelineUser;
     }
 
-    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "content", columnDefinition = "TEXT")
     public String getContent() {
         return this.content;
     }
