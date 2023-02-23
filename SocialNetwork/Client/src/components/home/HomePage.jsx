@@ -119,7 +119,7 @@ class HomePage extends Component {
         const isAdmin = userService.isAdmin();
         const isTheCurrentLoggedInUser = this.props.loggedInUserData.id === this.props.timeLineUserData.id;
         let loggedIn = userService.isTheUserLoggedIn();
-        debugger;
+        // debugger;
         return (
             <Fragment>
 

@@ -53,7 +53,7 @@ public class UserRegisterBindingModel implements Serializable {
         this.email = email;
     }
 
-    @Password(minLength = 4, maxLength = 16, containsOnlyLettersAndDigits = true, message = ValidationMessageConstants.USER_INVALID_PASSWORD_MESSAGE)
+    @Pattern(regexp = "^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-.]).{8,}$", message = ValidationMessageConstants.USER_INVALID_PASSWORD_MESSAGE)
     public String getPassword() {
         return this.password;
     }
