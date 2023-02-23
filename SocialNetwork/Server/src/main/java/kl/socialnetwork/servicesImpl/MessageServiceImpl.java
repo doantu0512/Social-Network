@@ -77,6 +77,7 @@ public class MessageServiceImpl implements MessageService {
         messageServiceModel.setToUser(toUser);
         messageServiceModel.setRelationship(relationship);
         messageServiceModel.setTime(LocalDateTime.now());
+        messageServiceModel.setType("TEXT");
 
         Message message = this.modelMapper.map(messageServiceModel, Message.class);
 
