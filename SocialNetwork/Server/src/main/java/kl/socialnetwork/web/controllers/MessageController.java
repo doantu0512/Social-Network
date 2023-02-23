@@ -60,7 +60,7 @@ public class MessageController {
     }
 
     /*
-     * This MessageMapping annotated method will be handled by
+     * This MessageMapping annotated method will be handled by+
      * SimpAnnotationMethodMessageHandler and after that the Message will be
      * forwarded to Broker channel to be forwarded to the client via WebSocket
      */
@@ -71,6 +71,7 @@ public class MessageController {
 
         if (messageAllViewModel != null) {
             String response = this.objectMapper.writeValueAsString(messageAllViewModel);
+            System.out.println("====response" + response);
             template.convertAndSend("/user/" + message.getToUser().getUsername() + "/queue/position-update", response);
             template.convertAndSend("/user/" + message.getFromUser().getUsername() + "/queue/position-update", response);
             return;

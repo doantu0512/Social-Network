@@ -10,6 +10,7 @@ public class MessageAllViewModel {
     private String fromUserProfilePicUrl;
     private String content;
     private LocalDateTime time;
+    private String type;
 
     public MessageAllViewModel() {
     }
@@ -68,5 +69,13 @@ public class MessageAllViewModel {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

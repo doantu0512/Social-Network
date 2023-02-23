@@ -14,6 +14,7 @@ public class MessageServiceModel {
     private String content;
     private int status;
     private LocalDateTime time;
+    private String type;
 
     public MessageServiceModel() {
     }
@@ -80,5 +81,13 @@ public class MessageServiceModel {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
