@@ -91,6 +91,9 @@
 .message-image.loggedInUser {
     order: 3;
 }
+.chat-images{
+    border-radius:1rem;
+}
 
 
 

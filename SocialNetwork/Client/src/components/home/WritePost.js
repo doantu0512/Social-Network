@@ -111,10 +111,9 @@ export default class WritePost extends Component {
 
     canBeSubmitted() {
         const { content ,images} = this.state;
-        if(content.length===0&&images.length==0){
-            return false
-        }
-        return true;
+        const errors = (this.validate(content)&&this.validate(images));
+        const isDisabled = Object.keys(errors).some(x => errors[x])
+        return !isDisabled;
     }
 
     showModal=()=>{
