@@ -13,10 +13,12 @@ import kl.socialnetwork.services.MessageService;
 import kl.socialnetwork.utils.responseHandler.exceptions.CustomException;
 import kl.socialnetwork.validations.serviceValidation.services.MessageValidationService;
 import kl.socialnetwork.validations.serviceValidation.services.RelationshipValidationService;
+import kl.socialnetwork.validations.serviceValidation.services.StorageService;
 import kl.socialnetwork.validations.serviceValidation.services.UserValidationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -35,9 +37,10 @@ public class MessageServiceImpl implements MessageService {
     private final MessageValidationService messageValidation;
     private final RelationshipValidationService relationshipValidation;
     private final ModelMapper modelMapper;
+    private final StorageService storageService;
 
     @Autowired
-    public MessageServiceImpl(MessageRepository messageRepository, RelationshipRepository relationshipRepository, UserRepository userRepository, UserValidationService userValidation, MessageValidationService messageValidation, RelationshipValidationService relationshipValidation, ModelMapper modelMapper) {
+    public MessageServiceImpl(MessageRepository messageRepository, RelationshipRepository relationshipRepository, UserRepository userRepository, UserValidationService userValidation, MessageValidationService messageValidation, RelationshipValidationService relationshipValidation, ModelMapper modelMapper, StorageService storageService) {
         this.messageRepository = messageRepository;
         this.relationshipRepository = relationshipRepository;
         this.userRepository = userRepository;
@@ -45,6 +48,7 @@ public class MessageServiceImpl implements MessageService {
         this.messageValidation = messageValidation;
         this.relationshipValidation = relationshipValidation;
         this.modelMapper = modelMapper;
+        this.storageService = storageService;
     }
 
     @Override
@@ -67,9 +71,9 @@ public class MessageServiceImpl implements MessageService {
         Relationship relationship = relationshipRepository
                 .findRelationshipWithFriendWithStatus(fromUser.getId(), toUser.getId(), 1);
 
-        if (!relationshipValidation.isValid(relationship)) {
-            throw new CustomException(SERVER_ERROR_MESSAGE);
-        }
+//        if (!relationshipValidation.isValid(relationship)) {
+//            throw new CustomException(SERVER_ERROR_MESSAGE);
+//        }
 
         MessageServiceModel messageServiceModel = new MessageServiceModel();
         messageServiceModel.setContent(messageCreateBindingModel.getContent());
@@ -78,6 +82,48 @@ public class MessageServiceImpl implements MessageService {
         messageServiceModel.setRelationship(relationship);
         messageServiceModel.setTime(LocalDateTime.now());
         messageServiceModel.setType("TEXT");
+
+        Message message = this.modelMapper.map(messageServiceModel, Message.class);
+
+        Message savedMessage = messageRepository.save(message);
+
+        if(savedMessage != null){
+            return  this.modelMapper.map(savedMessage, MessageServiceModel.class);
+        }
+
+        throw new CustomException(SERVER_ERROR_MESSAGE);
+    }
+
+    @Override
+    public MessageServiceModel createMessage(MultipartFile[] images, String toUserId, String loggedInUsername) throws Exception {
+
+        User fromUser = userRepository
+                .findByUsername(loggedInUsername)
+                .filter(userValidation::isValid)
+                .orElseThrow(() -> new CustomException(SERVER_ERROR_MESSAGE));
+
+        User toUser = userRepository
+                .findById(toUserId)
+                .filter(userValidation::isValid)
+                .orElseThrow(() -> new CustomException(SERVER_ERROR_MESSAGE));
+
+
+        Relationship relationship = relationshipRepository
+                .findRelationshipWithFriendWithStatus(fromUser.getId(), toUser.getId(), 1);
+
+        if (!relationshipValidation.isValid(relationship)) {
+            throw new CustomException(SERVER_ERROR_MESSAGE);
+        }
+
+        List<String>  content = storageService.uploadFile(images);
+
+        MessageServiceModel messageServiceModel = new MessageServiceModel();
+        messageServiceModel.setContent(content.get(0));
+        messageServiceModel.setFromUser(fromUser);
+        messageServiceModel.setToUser(toUser);
+        messageServiceModel.setRelationship(relationship);
+        messageServiceModel.setTime(LocalDateTime.now());
+        messageServiceModel.setType("IMAGE");
 
         Message message = this.modelMapper.map(messageServiceModel, Message.class);
 

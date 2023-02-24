@@ -10,6 +10,11 @@ public class MessageCreateBindingModel {
     public MessageCreateBindingModel() {
     }
 
+    public MessageCreateBindingModel(String toUserId, String content) {
+        this.toUserId = toUserId;
+        this.content = content;
+    }
+
     @NotNull
     @NotEmpty
     public String getToUserId() {
