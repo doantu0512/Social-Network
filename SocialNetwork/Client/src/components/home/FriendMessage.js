@@ -5,7 +5,7 @@ import placeholder_user_image from '../../assets/images/placeholder.png';
 import './css/Message.css';
 
 const FriendMessage = (props) => {
-    const { content, fromUserId, time} = props;
+    const { content, fromUserId, time,type} = props;
     const loggedInUserId = userService.getUserId();
 
     let chatContentClass = '';
@@ -32,7 +32,12 @@ const FriendMessage = (props) => {
                 <img className={imgClassName} src={profilePicUrl} alt="creatorPic" />
             </div>
             <div className={`message-description`}>
-                <p className={`message-content ${chatContentClass}`}> {content} </p>
+                {type==="TEXT"?
+                    <p className={`message-content ${chatContentClass}`}> {content} </p>
+                    :
+                    <img className="chat-images" src={"http://localhost:8080/storage/post-image/"+content}/>
+                }
+
                 <div className={`message-info ${chatContentClass}`}>
                     <p className="message-time"> {time.dayOfMonth} {month} {hour}:{minute} {dayTime}</p>
                 </div>
