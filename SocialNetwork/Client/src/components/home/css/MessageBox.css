@@ -264,6 +264,7 @@
     width: 100%;
     position: relative;
     background: white;
+    padding: 0.5rem 0;
 }
 
 .chat-textarea {
@@ -284,8 +285,8 @@
 
 .send-btn {
     position: absolute;
-    bottom: 15px;
-    right: 0;
+    bottom: 0px;
+    right: 15px;
 }
 
 /* ##################################### */
@@ -339,6 +340,27 @@
     background-color: rgb(167, 28, 19);
     color:white;
 }
+
+.image-mess{
+    font-size: 1.5rem;
+    margin-left: 6px;
+    cursor: pointer;
+}
+
+.chat-input-group textarea{
+    background-color: #EAEAEAFF;
+    border: 0;
+    border-radius: 10px;
+    border-color:#EAEAEAFF;
+}
+
+.mess-content{
+    background-color: #EAEAEAFF;
+    border-radius: 1rem;
+    border: 0;
+}
+
+
 
 @media  screen and (max-width: 500px){
     .chat-container{
